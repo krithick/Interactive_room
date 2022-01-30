@@ -18,23 +18,164 @@
         <source src="LG.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 
     </video>
-    <link rel="stylesheet" href="style.css">
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js" 
-    integrity="sha512-UvyokRh1Y5UESe/TZ6h+r5CvsOVzcX3CirAbCTBcLs5BxzIO8IhswbESIgvqwoAkxKszDB+JJTMSbVN6SKCN8Q==" 
-    crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <style>
+      *
+{
+    margin: 0;
+    padding: 0;
+}
 
-    </script>
+html,
+body
+{
+    overflow: hidden;
+}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" 
-crossorigin="anonymous" 
-referrerpolicy="no-referrer"></script>
-<script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js">
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+.loading-bar
+{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #ffffff;
+    transform: scaleX(0.3);
+    transform-origin: top left;
+    transition: transform 0.5s;
+}
 
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" 
-referrerpolicy="no-referrer"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js" integrity="sha512-UvyokRh1Y5UESe/TZ6h+r5CvsOVzcX3CirAbCTBcLs5BxzIO8IhswbESIgvqwoAkxKszDB+JJTMSbVN6SKCN8Q==" crossorigin="anonymous" 
-referrerpolicy="no-referrer"></script>   -->
+.loading-bar.ended
+{
+    transform: scaleX(0);
+    transform-origin: 100% 0;
+    transition: transform 1.5s ease-in-out;
+}
+.point
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* pointer-events: none; */
+}
+
+.point .label
+{
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #00000077;
+    border: 1px solid #ffffff77;
+    color: #ffffff;
+    font-family: Helvetica, Arial, sans-serif;
+    text-align: center;
+    line-height: 40px;
+    font-weight: 100;
+    font-size: 14px;
+    cursor: help;
+    transform: scale(0, 0);
+    transition: transform 0.3s;
+}
+
+.point .text
+{
+    position: absolute;
+    top: 30px;
+    left: -120px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 4px;
+    background: #00000077;
+    border: 1px solid #ffffff67;
+    color: #ffffff;
+    line-height: 1.3em;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 100;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.point:hover .text
+{
+    opacity: 1;
+}
+
+.point.visible .label
+{
+    transform: scale(1, 1);
+}
+
+
+.heading{
+
+    position: absolute;
+    
+}
+.heading .htext{
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    width: 340px;
+    height:50px;
+    padding: 20px;
+    border-radius:4px;
+    font-family: Roboto;
+    font-weight: 100;
+    font-size: 64px;
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;    
+}
+.heading.visible .htext
+{
+    opacity: 1;
+}
+
+.heading .link{
+    position: absolute;
+    top: 40px;
+    left: 400px;
+    width: 100px;
+    height : 100px;
+}
+.heading .img
+{
+    width: 50px;
+    height : 50px;
+}
+
+/* #menuPanel {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#startButton {
+    height: 50px;
+    width: 200px;
+    margin: -25px -100px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    font-size: 32px;
+} */
+    </style>
+    
 
 <script type="importmap">
     {
