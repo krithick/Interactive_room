@@ -15,38 +15,42 @@
     
     <video id="video" loop crossOrigin="anonymous" playsinline style="display:none" muted="false">
       
-        <source src="../assets/LG.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        <source src="LG.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 
     </video>
     <link rel="stylesheet" href="style.css">
-    <script type="module">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js" 
+    integrity="sha512-UvyokRh1Y5UESe/TZ6h+r5CvsOVzcX3CirAbCTBcLs5BxzIO8IhswbESIgvqwoAkxKszDB+JJTMSbVN6SKCN8Q==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" 
+crossorigin="anonymous" 
+referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js">
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" 
+referrerpolicy="no-referrer"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js" integrity="sha512-UvyokRh1Y5UESe/TZ6h+r5CvsOVzcX3CirAbCTBcLs5BxzIO8IhswbESIgvqwoAkxKszDB+JJTMSbVN6SKCN8Q==" crossorigin="anonymous" 
+referrerpolicy="no-referrer"></script>   -->
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "../build/three.module.js"
+        }
+    }
+</script>
 
 
-// import * as THREE from "../build/three.module.js";
+<script   type="module">
+    import * as THREE from 'three';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
+			import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 
-// import { OrbitControls } from "../lib/OrbitControls.js";
-// import { GLTFLoader } from "../lib/GLTFLoader.js";
-// import './style.css'
-import * as THREE from '../modules/three/build/three.module.js'
-import * as dat from './modules/dat.gui/build/dat.gui.module.js'
-import { OrbitControls } from './modules/three/examples/jsm/controls/OrbitControls.js'
-
-import { GLTFLoader } from '../modules/three/examples/jsm/loaders/GLTFLoader.js'
-
-
-import { gsap } from './modules/gsap/src/all.js'
-import { CameraHelper, Vector3 } from './modules/three/build/three.module.js'
-
-
-/**
- * Base
- */
-// Debug
-
-
-
-
-// // Scene
+import { gsap } from './jsm/gsap/src/all.js'
 let sceneReady = false
 
 const loadingBarElement = document.querySelector('.loading-bar')
@@ -83,7 +87,6 @@ const gltfLoader = new GLTFLoader(loadingManager)
 const gltfLoader1 = new GLTFLoader(loadingManager)
 
 const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
-
 /**
  * Base
  */
@@ -123,6 +126,9 @@ const overlayMaterial = new THREE.ShaderMaterial({
         }
     `
 })
+
+
+
 const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
 scene.add(overlay)
 
@@ -165,16 +171,6 @@ debugObject.envMapIntensity = 5
 
 
 
-//grids
-
-
- const pgeometry = new THREE.PlaneGeometry( 10, 10 );
- const pmaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, opacity:0.1 ,transparent:true} );
- const plane = new THREE.Mesh( pgeometry, pmaterial );
-plane.rotation.x= Math.PI /2;
- //scene.add( plane );
-
-
 
 var video = document.getElementById( 'video' );
  //video.play();
@@ -184,16 +180,17 @@ var video = document.getElementById( 'video' );
 
  } );
 
+
  var vtexture = new THREE.VideoTexture( video );
-vtexture.mapping = THREE.EquirectangularReflectionMapping;
- vtexture.minFilter = THREE.LinearFilter;
-vtexture.magFilter = THREE.LinearFilter;
-vtexture.format = THREE.RGBFormat;
-vtexture.generateMipmaps = false;
+ vtexture.mapping = THREE.EquirectangularReflectionMapping;
+  vtexture.minFilter = THREE.LinearFilter;
+ vtexture.magFilter = THREE.LinearFilter;
+ vtexture.format = THREE.RGBFormat;
+ vtexture.generateMipmaps = false;
+ 
+ // console.log(vtexture)
 
- console.log(vtexture)
-
-/////////////////////////////// tv 
+ /////////////////////////////// tv 
 
  const pwgeometry = new THREE.PlaneGeometry( 0.9, 0.5 );
  const bwgeometry= new THREE.BoxGeometry(0.85,0.45,0.01)
@@ -374,8 +371,9 @@ console.log(tableset)
  const boxmat = new THREE.MeshPhysicalMaterial({color: 0xffff00})
  const box = new THREE.Mesh( boxgeo,boxmat)
  box.position.set(0,0,0)
- //scene.add(box)
 
+
+ 
  var table
  var room
  var carpet
@@ -404,16 +402,10 @@ console.log(tableset)
          updateAllMaterials()
           room = gltf.scene
          room.scale.set(10,10,10)
-         //table=gltf.scene.children.find((child)=> child.name==='Sofa')
- 
-         //sofa=gltf.scene.children.find((child)=> child.name==='Sofa')
-         //sofa.material= sofamaterial
-         //console.log(sofa)
- 
-         //book=gltf.scene.children.find((child)=> child.name==='Book')
+         
  
           sofa = gltf.scene.children.find((child=> child.name==='Sofa_Long2'))
-         //smallsofa1=gltf.scene.children.find((child)=> child.name==='Sofa_Small1')
+      
           carpet = gltf.scene.children.find((child)=> child.name==='Carpet')
           carpet1 = gltf.scene.children.find((child)=> child.name==='Carpet1')
           
@@ -423,17 +415,8 @@ console.log(tableset)
           tvframe= gltf.scene.children.find((child=>child.name==='Frame'))
           //tvscreen = tv.children.find((child=>child.name=='TV1001'))
           tvscreen= gltf.scene.children.find((child=> child.name==='Tv_Screen'))
-          //newtv = gltf.scene.children.find((child=>child.name==='tv'))
-          //vtexture.center = new THREE.Vector2(0.5, 0.5)
-          //vtexture.rotation=  Math.PI *4
-         //vtexture.flipY=false
-         //console.log(vtexture.rotation)
-          console.log(tvscreen.material)
-         // tvscreen.material=pwmaterial
         
-          //tvscreen.material.side = THREE.DoubleSide;
-       // newtv.material.opacity=0
-          //tvscreen.material.map=vtexture
+          
 
           var color = 0x000000;
           tvscreen.material.color.set(color)
@@ -451,15 +434,7 @@ console.log(tv)
       const colorsofa =0x00000
       sofa.material.color.set(colorsofa)
 
-          //  room.addEventListener("click", (event)=>{
-        //    event.stopPropagation();
-        //    tvpos(room);
-        //  })
-        //const tvreset= new THREE.Vector3(-1,1.1,-0.72)
         
-        //resetButton(scene,tvreset,"resetbutton",reseticon)
-        //createResetMarker(tvscreen,tvmarker)
-        //console.log(createResetMarker(room,tvmarker))
 
         
         
@@ -487,125 +462,44 @@ console.log(tv)
       event.stopPropagation();
       tvpos();
   })
-  //interactionManager.add(Wall_Blue)
- // var aabb = new THREE.Box3().setFromObject( book );
- //         var center = aabb.getCenter( new THREE.Vector3() );
- //         var size = aabb.getSize( new THREE.Vector3() );
-         
-   //console.log('sofaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-   //table.getWorldPosition(target_test)
-   //console.log(target_test)
+
  })
 
- 
- const points = [
-  {
-      position: new THREE.Vector3(2, 0, 0,),
-      element: document.querySelector('.heading')
-  },
-  {
-      position: new THREE.Vector3(-1.9, 0.3, 2.2 ),
-      element: document.querySelector('.point-1')
-  }
- //  {
- //      position: new THREE.Vector3(1.6, - 1.3, - 0.7),
- //      element: document.querySelector('.point-2')
- //  }
-]
- //
- 
- //var spots = new Array(carpet, ground);
-//var  spots=[carpet,ground] 
- 
 
-// /////tv
-// var tv
-// var tvscreen
-// gltfLoader1.load('tv.gltf',(gltf=>{
-//     scene.add(gltf.scene)
-//     tv=gltf.scene
-//     tv.scale.set(10,10,10)
-    
-
-//     console.log(tv)
-
-// tvscreen= gltf.scene.children.find((child)=> child.name === 'tv')
-// var pos = new Vector3();
-// tvscreen.getWorldPosition(pos)
-// console.log(pos)
-// tvscreen.addEventListener("click", (event)=>{
-//     event.stopPropagation();
-//     tvpos();
-// })
-// interactionManager.add(tvscreen)
-// //book=gltf.scene.children.find((child)=> child.name==='Book')
-
-
-
-// }));
-
-/**
+ /**
  * Lights
  */
- const directionalLight = new THREE.DirectionalLight('#ffffff', 3)
- directionalLight.castShadow = true
- directionalLight.shadow.camera.far = 15
- directionalLight.shadow.mapSize.set(1024, 1024)
- directionalLight.shadow.normalBias = 0.05
- //directionalLight.position.set(0.25, 3, - 2.25)
- directionalLight.position.set(10, 20, 5)
- scene.add(directionalLight)
-
- const hemishperelight = new THREE.HemisphereLight('#ffffff')
-// hemishperelight.castShadow=true;
- hemishperelight.position.set(0,5,0)
- scene.add(hemishperelight)
+  const directionalLight = new THREE.DirectionalLight('#ffffff', 3)
+  directionalLight.castShadow = true
+  directionalLight.shadow.camera.far = 15
+  directionalLight.shadow.mapSize.set(1024, 1024)
+  directionalLight.shadow.normalBias = 0.05
+  //directionalLight.position.set(0.25, 3, - 2.25)
+  directionalLight.position.set(10, 20, 5)
+  scene.add(directionalLight)
  
+  const hemishperelight = new THREE.HemisphereLight('#ffffff')
+ // hemishperelight.castShadow=true;
+  hemishperelight.position.set(0,5,0)
+  scene.add(hemishperelight)
+  
+ 
+ /**
+  * Camera
+  */
+ 
+  const camera = new THREE.PerspectiveCamera(
+     50,
+     window.innerWidth / window.innerHeight,
+     0.01,
+     100
+   );
+ 
+   scene.add(camera);
 
-/**
- * Camera
- */
-
- const camera = new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth / window.innerHeight,
-    0.01,
-    100
-  );
-
-  scene.add(camera);
-
-// //helper
 
 
-
-
-/**
- * Controls 
- */
-//  const controls = new OrbitControls(camera, canvas)
-//  controls.listenToKeyEvents( window );
-//  controls.enableDamping = true
-//  //camera.position.set(6.0,1.0,0)
-//  camera.position.set(2.5,1,-1)
-//  controls.target.set(0,0,0)
-
-//  startScene()
-//  controls.target.set(0,0,0)
-//  controls.maxPolarAngle = Math.PI / 2.125;
-
-//  controls.mouseButtons = {
-//  LEFT: THREE.MOUSE.PAN,
-//  MIDDLE: THREE.MOUSE.DOLLY,
-//  RIGHT: THREE.MOUSE.ROTATE
-// }
-
-//  controls.addEventListener('end', () => {
-//   updateCameraOrbit();
-// });
-// updateCameraOrbit();
-//  controls.update();
-const controls = new OrbitControls(camera, canvas)
+   const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true;
 
 controls.maxPolarAngle = Math.PI / 2.125;
@@ -621,27 +515,9 @@ controls.mouseButtons = {
     MIDDLE: THREE.MOUSE.DOLLY,
     RIGHT: THREE.MOUSE.ROTATE
 }
-  // controls.addEventListener('end', () => {
-  //   updateCameraOrbit();
-  // });
 
 
-  //startpos()
-//   updateCameraOrbit();
-// controls.update()
-//sofapos()
-  //canvas.addEventListener("click", onclick, true);
-
-
-
- 
-
-
-
-
-
-  
-  function table1pos(){
+function table1pos(){
     gsap.to( camera.position, {
         duration: 1,  
         x: 4.2,
@@ -910,20 +786,6 @@ window.addEventListener('resize', () =>
 })
 
 
-// /**
-//  * Renderer
-//  */
-// // const renderer = new THREE.WebGLRenderer({
-// //     canvas: canvas,
-// //     antialias: true
-// // })
-// // renderer.outputEncoding = THREE.sRGBEncoding
-// // renderer.setSize(sizes.width, sizes.height)
-// // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-// // debugObject.clearColor = '#201919'
-// // renderer.setClearColor(debugObject.clearColor)
-
 /**
  * actual renderer
  */
@@ -942,49 +804,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.domElement.addEventListener("click", onclick, true);
 
 
-///post 
 
-                
-/**
- * Points of interest
- */
-
- function playVid() {
-  video.play();
-}
-
-function pauseVid() {
-  video.pause();
-}
+function playVid() {
+    video.play();
+  }
+  
+  function pauseVid() {
+    video.pause();
+  }
+  
 
 
- 
-
-
-
-
-
-    // function resetButton(scene,position,name,mesh)
-    // {
-    //     const tloader = new THREE.TextureLoader();
-    //     const resetTexture = tloader.load("/link.png")
-    //     const resetGeometry = new THREE.PlaneGeometry(0.0725,0.0725)
-    // const resetmaterial = new THREE.MeshBasicMaterial( {map :resetTexture,color: 0xFFFFFF, side: THREE.DoubleSide, opacity:1 , transparent:true  } );
-    //  mesh = new THREE.Mesh(resetGeometry,resetmaterial)
-    //  mesh.name=name 
-    //  console.log(mesh)
-    //       mesh.position.set(position)
-    //  scene.add(mesh)
-    
-    
-    // }
-
-
-
-
-
-
- var raycaster = new THREE.Raycaster();
+  var raycaster = new THREE.Raycaster();
 function onclick(event) {
 
   console.log('hmmmmmmmm')
@@ -1158,213 +989,24 @@ console.log(raycaster)
       }
 
      }
-    
-
-    // if(selectedObject=intersects[0]){
-
-    //   tvpos()
-    // }
-     
-   // newPos.y = camera.position.y;
-    // tween = new TWEEN.Tween(camera.position).to(
-    //   {
-    //     x: newPos.x,
-    //     y: newPos.y,
-    //     z: newPos.z
-    //   },
-    //  // 2000
-    // );
-
-    // tween.easing(TWEEN.Easing.Quadratic.Out);
-    // tween.start();
-    // tween.onUpdate(function () {
-    //   updateCameraOrbit();
-    // }.bind(this));
-    // tween.onComplete(function () {
-    //   updateCameraOrbit();
-    // }.bind(this));
-  }
+    }
 }
 
 
-/**
- * interaction manager
- */
 
-
- // const interactionManager = new InteractionManager(
- //    renderer,
- //    camera,
- //    renderer.domElement
- //  );
-// // gui
-// //     .addColor(debugObject, 'clearColor')
-// //     .onChange(() =>
-// //     {
-// //         renderer.setClearColor(debugObject.clearColor)
-// //     })
-// function onclick(event) {
-
-//   console.log('hmmmmmmmm')
-//   var selectedObject;
-//   var raycaster = new THREE.Raycaster();
-
-
-//   var mouse = new THREE.Vector2();
-//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-//   raycaster.setFromCamera(mouse, camera);
-
-//   var  spots= new Array(Wall_Blue,box,carpet,ground,sofa,tv)
- 
-//   var intersects = raycaster.intersectObjects(spots,true);
-//   if (intersects.length > 0) {
-    
-//     selectedObject = intersects[0];
-//     console.log(intersects[0])
-
-
-//     // switch (intersects[0].object.name)
-//     // {
-//     //   case "Sofa_Long2":{
-
-//     //   }
-
-
-//     // }
-//     if(intersects[0].object.name==='Sofa_Long2'){
-//       tvpos()
-//       outlinePass.selectedObjects=spots;
-//     }
-
-//     // if(selectedObject=intersects[0]){
-
-//     //   tvpos()
-//     // }
-//      else{
-//     console.log(selectedObject)
-
-//     var newPos = new THREE.Vector3(selectedObject.point.x,camera.position.y,selectedObject.point.z);
-//     gsap.to( camera.position, {
-//       duration: 3,  
-//       x: newPos.x,
-//       y: newPos.y,
-//       z: newPos.z,
-//       onUpdate: function () {
-//         camera.updateProjectionMatrix();
-//         updateCameraOrbit();
-//         //controls.update();
-//       },
-//       onComplete: ()=>{
-//         camera.updateProjectionMatrix();
-//         updateCameraOrbit();
-//         controls.update();
-//       }
-
-//     } );
-//     }
-//    // newPos.y = camera.position.y;
-//     // tween = new TWEEN.Tween(camera.position).to(
-//     //   {
-//     //     x: newPos.x,
-//     //     y: newPos.y,
-//     //     z: newPos.z
-//     //   },
-//     //  // 2000
-//     // );
-
-//     // tween.easing(TWEEN.Easing.Quadratic.Out);
-//     // tween.start();
-//     // tween.onUpdate(function () {
-//     //   updateCameraOrbit();
-//     // }.bind(this));
-//     // tween.onComplete(function () {
-//     //   updateCameraOrbit();
-//     // }.bind(this));
-//   }
-// }
-// /**
-//  * Animate
-//  */
- const clock = new THREE.Clock()
+const clock = new THREE.Clock()
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-
-      //Update materials
-    //portalLightMaterial.uniforms.uTime.value = elapsedTime
-    //firefliesMaterial.uniforms.uTime.value = elapsedTime
-
-    // Update controls
     controls.update()
-
-    
-
-    // if(sceneReady)
-    // {
-    //     // Go through each point
-    //     for(const point of points)
-    //     {
-    //       var  spots= new Array(carpet,sofa,tv,carpet1,dining_table,table)
-    //         // Get 2D screen position
-    //         const screenPosition = point.position.clone()
-    //         screenPosition.project(camera)
-            
-    //         // Set the raycaster
-    //         raycaster.setFromCamera(screenPosition, camera)
-    //         const intersects = raycaster.intersectObjects(spots, true)
-            
-            
-    //         // No intersect found
-    //         if (intersects.length === 0) 
-    //         {
-    //             // Show
-                
-
-                
-    //             point.element.classList.add('visible')
-    //         }
-
-    //         // Intersect found
-    //         else
-    //         {
-    //             // Get the distance of the intersection and the distance of the point
-    //             const intersectionDistance = intersects[0].distance
-    //             console.log(intersects[0])
-    //             const pointDistance = point.position.distanceTo(camera.position)
-    
-    //             // Intersection is close than the point
-    //             if(intersectionDistance < pointDistance)
-    //             {
-    //                 // Hide
-    //                 point.element.classList.remove('visible')
-    //             }
-    //             // Intersection is further than the point
-    //             else
-    //             {
-    //                 // Show
-    //                 point.element.classList.add('visible')
-    //             }
-    //         }
-    
-    //         const translateX = screenPosition.x * sizes.width * 0.5
-    //         const translateY = - screenPosition.y * sizes.height * 0.5
-    //         point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
-    //     }
-    // }
-
-    //transformControls.update();
-    // Render
-   renderer.render(scene, camera)
+    renderer.render(scene, camera)
    // composer.render()
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
-
 tick()
-        
-    </script>
+</script>
 </body>
 </html>
